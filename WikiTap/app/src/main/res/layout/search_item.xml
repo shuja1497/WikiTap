@@ -1,55 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="16dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-  <ImageView
-      android:id="@+id/image"
-      android:layout_width="50dp"
-      android:layout_height="50dp"
-      tools:src="@tools:sample/avatars"
-      app:layout_constraintStart_toStartOf="parent"
-      android:layout_marginStart="8dp"
-      app:layout_constraintTop_toTopOf="parent"
-      android:layout_marginTop="8dp"
-      android:contentDescription="@string/image" />
+    <data>
 
-  <TextView
-      android:id="@+id/title"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="8dp"
-      android:maxLines="2"
-      android:textColor="@android:color/black"
-      android:textSize="20sp"
-      app:layout_constraintEnd_toStartOf="@+id/totalViews"
-      app:layout_constraintStart_toEndOf="@+id/image"
-      app:layout_constraintTop_toTopOf="@+id/image"
-      tools:text="@tools:sample/full_names" />
+        <variable
+            name="page"
+            type="com.shuja1497.wikitap.model.Page" />
+    </data>
 
-  <TextView
-      android:id="@+id/subTitle"
-      android:layout_width="0dp"
-      android:layout_height="wrap_content"
-      android:layout_marginStart="8dp"
-      android:layout_marginTop="8dp"
-      android:maxLines="4"
-      app:layout_constraintEnd_toStartOf="@+id/totalViews"
-      app:layout_constraintHorizontal_bias="0.050"
-      app:layout_constraintStart_toEndOf="@+id/image"
-      app:layout_constraintTop_toBottomOf="@+id/title"
-      tools:text="@tools:sample/lorem/random" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp">
 
-  <TextView
-      android:id="@+id/totalViews"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      tools:text="@tools:sample/us_zipcodes"
-      app:layout_constraintTop_toTopOf="@+id/image"
-      app:layout_constraintEnd_toEndOf="parent"
-      android:layout_marginEnd="8dp" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/image"
+            android:imageUrl="@{page.thumbnail != null ? page.thumbnail .source : null}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:maxLines="2"
+            android:setText="@{page.title}"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/totalViews"
+            app:layout_constraintStart_toEndOf="@+id/image"
+            app:layout_constraintTop_toTopOf="@+id/image"
+            tools:text="@tools:sample/full_names" />
+
+        <TextView
+            android:id="@+id/subTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:maxLines="4"
+            android:setText="@{page.description}"
+            app:layout_constraintEnd_toStartOf="@+id/totalViews"
+            app:layout_constraintHorizontal_bias="0.050"
+            app:layout_constraintStart_toEndOf="@+id/image"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            tools:text="@tools:sample/lorem/random" />
+
+        <TextView
+            android:id="@+id/totalViews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/image"
+            tools:text="@tools:sample/us_zipcodes" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

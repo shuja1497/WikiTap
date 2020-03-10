@@ -8,11 +8,11 @@ data class SearchResponse(
     val batchComplete: Boolean,
 
     @SerializedName("query")
-    val query: Query
+    val query: Query?
 )
 
 
 data class Query(
     @SerializedName("pages")
-    val pages: ArrayList<Page>
+    val pages: ArrayList<Page>?
 )

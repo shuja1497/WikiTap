@@ -1,6 +1,7 @@
 package com.shuja1497.wikitap.model
 
 import com.google.gson.annotations.SerializedName
+import com.shuja1497.wikitap.utilities.isValidString
 
 data class Page(
 
@@ -30,5 +31,17 @@ data class Page(
 
     @SerializedName("pageviews")
     val pageViews: HashMap<String, Int>?
+) {
 
-)
+    fun getDescription(): String? {
+
+        if (this.pageProperties != null && isValidString(pageProperties.shortDescription)) {
+            return pageProperties.shortDescription
+        }
+
+        if (terms?.description != null && terms.description.isNotEmpty()) {
+            return terms.description[0]
+        }
+        return null
+    }
+}
