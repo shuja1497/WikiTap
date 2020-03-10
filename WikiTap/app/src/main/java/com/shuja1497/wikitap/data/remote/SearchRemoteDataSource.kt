@@ -1,6 +1,7 @@
 package com.shuja1497.wikitap.data.remote
 
 import com.shuja1497.wikitap.data.ApiClient
+import com.shuja1497.wikitap.model.SearchResponse
 import com.shuja1497.wikitap.utilities.*
 import io.reactivex.Single
 
@@ -16,7 +17,7 @@ object SearchRemoteDataSource {
         return service!!
     }
 
-    fun getSearchResponse(query: String, offset: Int): Single<Void> {
+    fun getSearchResponse(query: String, offset: Int): Single<SearchResponse> {
         return getService().getSearchResponse(
             query,
             offset,

@@ -1,5 +1,6 @@
 package com.shuja1497.wikitap.data.remote
 
+import com.shuja1497.wikitap.model.SearchResponse
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -16,6 +17,6 @@ interface SearchService {
         @Query("generator") generator: String,
         @Query("formatversion") formatVersion: String,
         @Query("gpslimit") limit: String
-    ): Single<Void>
+    ): Single<SearchResponse>
 
 }
