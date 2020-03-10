@@ -1,6 +1,6 @@
 package com.shuja1497.wikitap.utilities
 
-const val BASE_URL = "https://en.wikipedia.org/w/"
+const val BASE_URL = "https://en.wikipedia.org"
 
 const val API_QUERY_PARAMS_ACTION = "query"
 const val API_QUERY_PARAMS_LIST = "search"

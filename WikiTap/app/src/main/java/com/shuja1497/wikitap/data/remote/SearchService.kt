@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface SearchService {
 
-    @GET("api.php")
+    @GET("/w/api.php")
     fun getSearchResponse(
         @Query("gpssearch") srsearch: String,
         @Query("gpsoffset") offset: Int,
