@@ -14,5 +14,5 @@ data class SearchResponse(
 
 data class Query(
     @SerializedName("pages")
-    val pages: ArrayList<Page>?
+    var pages: ArrayList<Page>?
 )

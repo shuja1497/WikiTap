@@ -15,3 +15,5 @@ const val VIEW_TYPE_PAGE = 0
 const val VIEW_TYPE_LOADER = 0
 
 const val INTENT_EXTRAS_URL = "URL"
+
+const val DATABASE_NAME = "wiki-tap-db.db"

@@ -7,10 +7,12 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.shuja1497.wikitap.R
+import com.shuja1497.wikitap.databinding.RecentSearchItemBinding
 import com.shuja1497.wikitap.viewmodels.ListViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -80,11 +82,36 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+
+        viewModel.dbResponse.observe(this, Observer {
+
+            it?.let { queries ->
+                offlineLinearLayout.removeAllViews()
+
+                recentSearchTitle.visibility = View.VISIBLE
+                for (pageQuery in queries.distinct()) {
+                    val view = DataBindingUtil.inflate<RecentSearchItemBinding>(
+                        layoutInflater,
+                        R.layout.recent_search_item,
+                        offlineLinearLayout,
+                        false
+                    )
+
+                    view.pageQuery = pageQuery
+                    offlineLinearLayout.addView(view.root)
+                    view.root.setOnClickListener {
+                        viewModel.fetchResponse(pageQuery.query)
+                        hideKeyBoard(searchText)
+                    }
+                }
+                offlineLinearLayout.requestFocus()
+            }
+        })
     }
 
     private fun setUpViewModel() {
         viewModel =
             ViewModelProviders.of(this).get(ListViewModel::class.java) // instantiating a view model
-        viewModel.fetchResponse(searchText.text.toString().trim())
+        viewModel.fetchFromDatabase()
     }
 }

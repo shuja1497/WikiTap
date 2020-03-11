@@ -1,46 +1,60 @@
 package com.shuja1497.wikitap.model
 
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import com.shuja1497.wikitap.utilities.isValidString
 
+@Entity
 data class Page(
 
     @SerializedName("pageid")
-    val pageId: Int,
+    var pageId: Int,
 
     @SerializedName("ns")
-    val ns: Int,
+    var ns: Int,
 
     @SerializedName("title")
-    val title: String,
+    var title: String,
 
     @SerializedName("index")
-    val index: Int,
+    var index: Int,
 
     @SerializedName("thumbnail")
-    val thumbnail: Thumbnail?,
+    @Ignore
+    var thumbnail: Thumbnail?,
 
     @SerializedName("pageimage")
-    val pageImage: String?,
+    var pageImage: String?,
 
     @SerializedName("pageprops")
-    val pageProperties: PageProperties?,
+    @Ignore
+    var pageProperties: PageProperties?,
 
     @SerializedName("terms")
-    val terms: Terms?,
+    @Ignore
+    var terms: Terms?,
 
     @SerializedName("pageviews")
-    val pageViews: HashMap<String, Int>?
+    @Ignore
+    var pageViews: HashMap<String, Int>?
 ) {
+
+    constructor() : this(0, 0, "", 0, null, "",
+        null, null, null)
+
+    @PrimaryKey(autoGenerate = true)
+    var uuid: Int = 0
 
     fun getDescription(): String? {
 
-        if (this.pageProperties != null && isValidString(pageProperties.shortDescription)) {
-            return pageProperties.shortDescription
+        if (this.pageProperties != null && isValidString(pageProperties!!.shortDescription)) {
+            return pageProperties!!.shortDescription
         }
 
-        if (terms?.description != null && terms.description.isNotEmpty()) {
-            return terms.description[0]
+        if (terms != null && terms!!.description != null && terms!!.description!!.isNotEmpty()) {
+            return terms!!.description!![0]
         }
         return null
     }

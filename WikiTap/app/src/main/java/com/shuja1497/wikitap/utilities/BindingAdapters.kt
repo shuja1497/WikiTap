@@ -11,7 +11,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.shuja1497.wikitap.R
 import java.util.*
 
-
 @BindingAdapter("android:imageUrl")
 fun loadImage(view: ImageView, url: String?) {
     view.loadImage(url, getProgressDrawable(view.context))
@@ -28,7 +27,7 @@ fun getProgressDrawable(context: Context): CircularProgressDrawable {
 fun ImageView.loadImage(url: String?, progressDrawable: CircularProgressDrawable) {
 
     val options = RequestOptions()
-        .placeholder(progressDrawable)
+        .placeholder(R.drawable.wallpaper_24dp)
         .error(R.drawable.wallpaper_24dp)
 
     Glide.with(context)

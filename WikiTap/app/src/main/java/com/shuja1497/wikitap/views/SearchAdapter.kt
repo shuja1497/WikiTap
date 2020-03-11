@@ -24,13 +24,9 @@ class SearchAdapter(private val pages: ArrayList<Page?>) :
 
         if (searchResponse.query?.pages != null) {
             pages.clear()
-            pages.addAll(searchResponse.query.pages.sortedBy { it.index })
+            pages.addAll(searchResponse.query.pages!!.sortedBy { it.index })
             notifyDataSetChanged()
         }
-    }
-
-    fun appendSearchList() {
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
