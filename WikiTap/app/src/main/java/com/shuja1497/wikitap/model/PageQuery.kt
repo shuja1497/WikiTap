@@ -5,8 +5,6 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class PageQuery(
+    @PrimaryKey
     val query: String
-) {
-    @PrimaryKey(autoGenerate = true)
-    var uuid: Int = 0
-}
+)

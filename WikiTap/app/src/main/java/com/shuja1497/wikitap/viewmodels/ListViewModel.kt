@@ -35,7 +35,7 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
         queryDao = PageDatabase(getApplication()).pageQueryDao()
 
         launch {
-            queryDao.insertQuery(PageQuery(query))
+            queryDao.insertOrUpdateQuery(PageQuery(query))
         }
 
         fetchFromRemote()

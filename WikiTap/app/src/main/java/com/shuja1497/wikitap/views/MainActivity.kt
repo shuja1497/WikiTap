@@ -48,6 +48,7 @@ class MainActivity : AppCompatActivity() {
                     return@setOnEditorActionListener false
                 }
 
+                searchAdapter.clearList()
                 viewModel.fetchResponse(query, false)
                 hideKeyBoard(view)
                 return@setOnEditorActionListener true
@@ -131,8 +132,16 @@ class MainActivity : AppCompatActivity() {
             it?.let { queries ->
                 offlineLinearLayout.removeAllViews()
 
-                recentSearchTitle.visibility = View.VISIBLE
-                for (pageQuery in queries.distinct()) {
+                if (queries.isNotEmpty()) {
+                    recentSearchTitle.visibility = View.VISIBLE
+                }
+
+                for (pageQuery in queries.distinct().asReversed()) {
+
+                    if (offlineLinearLayout.childCount == 5) {
+                        break
+                    }
+
                     val view = DataBindingUtil.inflate<RecentSearchItemBinding>(
                         layoutInflater,
                         R.layout.recent_search_item,
