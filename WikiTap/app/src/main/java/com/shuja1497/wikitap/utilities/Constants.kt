@@ -9,10 +9,10 @@ const val API_QUERY_PARAMS_PROP = "pageimages|pageprops|pageterms|pageviews"
 const val API_QUERY_PARAMS_FORMAT = "json"
 const val API_QUERY_PARAMS_GENERATOR = "prefixsearch"
 const val API_QUERY_PARAMS_FORMAT_VERSION = "2"
-const val API_QUERY_PARAMS_LIMIT = "30"
+const val API_QUERY_PARAMS_LIMIT = "20"
 
 const val VIEW_TYPE_PAGE = 0
-const val VIEW_TYPE_LOADER = 0
+const val VIEW_TYPE_LOADER = 1
 
 const val INTENT_EXTRAS_URL = "URL"
 

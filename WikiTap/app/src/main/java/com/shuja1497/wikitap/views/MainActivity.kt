@@ -6,21 +6,26 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.shuja1497.wikitap.R
 import com.shuja1497.wikitap.databinding.RecentSearchItemBinding
+import com.shuja1497.wikitap.utilities.isInValidString
 import com.shuja1497.wikitap.viewmodels.ListViewModel
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
 
+    private var pagination: Boolean = true
     private lateinit var viewModel: ListViewModel
     private val searchAdapter = SearchAdapter(arrayListOf())
+    private var query = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +37,18 @@ class MainActivity : AppCompatActivity() {
         searchText.setOnEditorActionListener { view, actionId, _ ->
 
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                viewModel.fetchResponse(searchText.text.toString().trim())
+                query = searchText.text.toString().trim()
+
+                if (isInValidString(query)) {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.valid_query_message),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setOnEditorActionListener false
+                }
+
+                viewModel.fetchResponse(query, false)
                 hideKeyBoard(view)
                 return@setOnEditorActionListener true
             }
@@ -42,9 +58,26 @@ class MainActivity : AppCompatActivity() {
 
     private fun initViews() {
 
+        val linearLayoutManager = LinearLayoutManager(this)
         searchResults.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = linearLayoutManager
             adapter = searchAdapter
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    if (linearLayoutManager.findLastVisibleItemPosition() >=
+                        (searchAdapter.itemCount - 2) && pagination
+                    ) {
+                        viewModel.loading.value?.let {
+                            if (!it) {
+                                searchAdapter.addFooter()
+                                viewModel.fetchResponse(query, true)
+                            }
+                        }
+                    }
+                }
+            })
         }
 
         observeViewModel()
@@ -61,7 +94,13 @@ class MainActivity : AppCompatActivity() {
 
             it?.let {
                 searchResults.visibility = View.VISIBLE
-                searchAdapter.updateSearchList(it)
+
+                if (searchAdapter.itemCount > 0) {
+                    searchAdapter.removeFooter()
+                    searchAdapter.appendSearchList(it)
+                } else {
+                    searchAdapter.updateSearchList(it)
+                }
             }
         })
 
@@ -76,9 +115,13 @@ class MainActivity : AppCompatActivity() {
             isLoading?.let {
                 searchProgressBar.visibility = if (it) View.VISIBLE else View.GONE
 
-                if (it) {
+                if (it && searchAdapter.itemCount == 0) {
                     error.visibility = View.GONE
                     searchResults.visibility = View.GONE
+                }
+
+                if (searchAdapter.itemCount > 0) {
+                    searchProgressBar.visibility = View.GONE
                 }
             }
         })
@@ -100,11 +143,24 @@ class MainActivity : AppCompatActivity() {
                     view.pageQuery = pageQuery
                     offlineLinearLayout.addView(view.root)
                     view.root.setOnClickListener {
-                        viewModel.fetchResponse(pageQuery.query)
+                        searchAdapter.clearList()
+                        query = pageQuery.query
+                        viewModel.fetchResponse(pageQuery.query, false)
                         hideKeyBoard(searchText)
                     }
                 }
                 offlineLinearLayout.requestFocus()
+            }
+        })
+
+        viewModel.isBatchComplete.observe(this, Observer {
+
+            it?.let {
+
+                pagination = !it
+                if (it) {
+                    searchAdapter.removeFooter()
+                }
             }
         })
     }

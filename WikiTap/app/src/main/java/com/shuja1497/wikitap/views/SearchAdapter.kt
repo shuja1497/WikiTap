@@ -29,6 +29,14 @@ class SearchAdapter(private val pages: ArrayList<Page?>) :
         }
     }
 
+    fun appendSearchList(searchResponse: SearchResponse) {
+        val oldPosition = pages.size
+        if (searchResponse.query?.pages != null) {
+            pages.addAll(searchResponse.query.pages!!.sortedBy { it.index })
+            notifyItemRangeChanged(oldPosition, pages.size-1)
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
@@ -88,5 +96,24 @@ class SearchAdapter(private val pages: ArrayList<Page?>) :
         }
 
         view.context.startActivity(intent)
+    }
+
+    fun addFooter() {
+        if (itemCount > 0) {
+            pages.add(null)
+            notifyItemInserted(pages.size)
+        }
+    }
+
+    fun removeFooter() {
+        if (itemCount > 1 && pages[itemCount-1] == null) {
+            pages.removeAt(pages.size - 1)
+            notifyItemRemoved(pages.size)
+        }
+    }
+
+    fun clearList() {
+        pages.clear()
+        notifyDataSetChanged()
     }
 }

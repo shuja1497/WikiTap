@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
-import com.shuja1497.wikitap.utilities.isValidString
+import com.shuja1497.wikitap.utilities.isInValidString
 
 @Entity
 data class Page(
@@ -49,7 +49,7 @@ data class Page(
 
     fun getDescription(): String? {
 
-        if (this.pageProperties != null && isValidString(pageProperties!!.shortDescription)) {
+        if (this.pageProperties != null && !isInValidString(pageProperties!!.shortDescription)) {
             return pageProperties!!.shortDescription
         }
 

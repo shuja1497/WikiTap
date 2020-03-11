@@ -7,6 +7,7 @@ import com.shuja1497.wikitap.model.PageDatabase
 import com.shuja1497.wikitap.model.PageQuery
 import com.shuja1497.wikitap.model.PageQueryDao
 import com.shuja1497.wikitap.model.SearchResponse
+import com.shuja1497.wikitap.utilities.API_QUERY_PARAMS_LIMIT
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
@@ -21,12 +22,15 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
     val dbResponse = MutableLiveData<List<PageQuery>>()
     val loadError = MutableLiveData<Boolean>()
     val loading = MutableLiveData<Boolean>()
+    val isBatchComplete = MutableLiveData<Boolean>()
 
-    var offset = 0
+    private var offset = 0
+    var increaseOffset = false
     var query: String = ""
 
-    fun fetchResponse(searchQuery: String) {
+    fun fetchResponse(searchQuery: String, increaseOffset: Boolean) {
 
+        this.increaseOffset = increaseOffset
         query = searchQuery
         queryDao = PageDatabase(getApplication()).pageQueryDao()
 
@@ -39,6 +43,12 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
 
     private fun fetchFromRemote() {
         loading.value = true
+
+        if (increaseOffset) {
+            offset += API_QUERY_PARAMS_LIMIT.toInt()
+        } else {
+            offset = 0
+        }
 
         disposable.add(
             SearchRemoteDataSource.getSearchResponse(query, offset)
@@ -60,6 +70,14 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
     }
 
     private fun storeResponseLocally(response: SearchResponse) {
+
+        if (response.batchComplete && response.query == null) {
+            isBatchComplete.value = true
+            pagesRetrieved(null)
+            return
+        }
+
+        isBatchComplete.value = false
 
         if (response.query?.pages == null) {
             return
@@ -84,7 +102,7 @@ class ListViewModel(application: Application) : BaseViewModel(application) {
         }
     }
 
-    private fun pagesRetrieved(response: SearchResponse) {
+    private fun pagesRetrieved(response: SearchResponse?) {
         loading.value = false
         loadError.value = false
         searchResponse.value = response

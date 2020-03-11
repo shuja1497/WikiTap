@@ -39,15 +39,15 @@ fun ImageView.loadImage(url: String?, progressDrawable: CircularProgressDrawable
 @BindingAdapter("android:setText")
 fun setText(view: TextView, text: String?) {
 
-    if (!isValidString(text)) {
+    if (isInValidString(text)) {
+        view.visibility = View.GONE
+    } else {
         view.visibility = View.VISIBLE
         view.text = text
-    } else {
-        view.visibility = View.GONE
     }
 }
 
-fun isValidString(text: String?): Boolean {
+fun isInValidString(text: String?): Boolean {
 
     return text == null ||
             text.isEmpty() ||
