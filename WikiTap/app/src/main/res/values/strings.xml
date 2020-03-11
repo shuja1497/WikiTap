@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">WikiTap</string>
     <string name="image">image</string>
+    <string name="error_msg">There was an error!. Please try again.</string>
 </resources>

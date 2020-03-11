@@ -36,32 +36,16 @@ class MainActivity : AppCompatActivity() {
             }
             return@setOnEditorActionListener false
         }
-
-
     }
 
     private fun initViews() {
 
-//        showKeyBoard()
         searchResults.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = searchAdapter
         }
 
         observeViewModel()
-    }
-
-    private fun showKeyBoard() {
-//        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,InputMethodManager.HIDE_IMPLICIT_ONLY)
-
-//        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//        imm.showSoftInput(searchText, InputMethodManager.SHOW_FORCED)
-
-        if (searchText.requestFocus()) {
-            val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(searchText, InputMethodManager.SHOW_IMPLICIT)
-        }
     }
 
     private fun hideKeyBoard(view: TextView) {

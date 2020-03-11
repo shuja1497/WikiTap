@@ -8,11 +8,17 @@
         <variable
             name="page"
             type="com.shuja1497.wikitap.model.Page" />
+
+        <variable
+            name="listener"
+            type="com.shuja1497.wikitap.views.SearchItemClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/search_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{listener::onSearchItemClicked}"
         android:paddingTop="16dp">
 
         <ImageView

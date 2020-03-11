@@ -1,6 +1,8 @@
 package com.shuja1497.wikitap.views
 
+import android.content.Intent
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -9,12 +11,14 @@ import com.shuja1497.wikitap.databinding.LoadingItemBinding
 import com.shuja1497.wikitap.databinding.SearchItemBinding
 import com.shuja1497.wikitap.model.Page
 import com.shuja1497.wikitap.model.SearchResponse
+import com.shuja1497.wikitap.utilities.BASE_WEB_VIEW_URL
+import com.shuja1497.wikitap.utilities.INTENT_EXTRAS_URL
 import com.shuja1497.wikitap.utilities.VIEW_TYPE_LOADER
 import com.shuja1497.wikitap.utilities.VIEW_TYPE_PAGE
-import timber.log.Timber
+import kotlinx.android.synthetic.main.search_item.view.*
 
 class SearchAdapter(private val pages: ArrayList<Page?>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    RecyclerView.Adapter<RecyclerView.ViewHolder>(), SearchItemClickListener {
 
     fun updateSearchList(searchResponse: SearchResponse) {
 
@@ -62,7 +66,7 @@ class SearchAdapter(private val pages: ArrayList<Page?>) :
 
         when (holder) {
             is PageViewHolder -> {
-                holder.setUI(pages[position]!!)
+                holder.setUI(pages[position]!!, this)
             }
 
             is LoadingViewHolder -> {
@@ -78,5 +82,15 @@ class SearchAdapter(private val pages: ArrayList<Page?>) :
         }
 
         return VIEW_TYPE_PAGE
+    }
+
+    override fun onSearchItemClicked(view: View) {
+        val url = BASE_WEB_VIEW_URL + view.title.text.toString().replace(" ", "_")
+
+        val intent = Intent(view.context, WebViewActivity::class.java).apply {
+            putExtra(INTENT_EXTRAS_URL, url)
+        }
+
+        view.context.startActivity(intent)
     }
 }

@@ -6,7 +6,11 @@ import com.shuja1497.wikitap.model.Page
 
 class PageViewHolder(private val view: SearchItemBinding) : RecyclerView.ViewHolder(view.root) {
 
-    fun setUI(page: Page) {
+    fun setUI(
+        page: Page,
+        searchItemClickListener: SearchItemClickListener
+    ) {
         view.page = page
+        view.listener = searchItemClickListener
     }
 }
